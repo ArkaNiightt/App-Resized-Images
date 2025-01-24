@@ -27,7 +27,7 @@ Este aplicativo web, desenvolvido com **Streamlit**, permite que você faça upl
 1. **Clone o repositório**
 
     ```bash
-    git clone 
+    git clone https://github.com/ArkaNiightt/App-Resized-Images.git
     cd "nome_projeto"
     ```
 
