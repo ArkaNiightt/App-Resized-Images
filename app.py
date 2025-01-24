@@ -10,7 +10,11 @@ def resize_image(image, target_size):
 
 def main():
     st.set_page_config(
-        page_title="Aplicativo de Redimensionamento de Imagens", layout="centered")
+        page_title="Aplicativo de Redimensionamento de Imagens", 
+        layout="centered", 
+        page_icon="📸"
+    )
+
     st.title("📸 Aplicativo de Redimensionamento de Imagens")
 
     col1, col2 = st.columns(2)
@@ -31,24 +35,25 @@ def main():
 
     if st.button("Redimensionar Imagens"):
         if uploaded_files:
-            with io.BytesIO() as buffer:
-                with zipfile.ZipFile(buffer, "w") as zipf:
-                    for file in uploaded_files:
-                        try:
-                            img = Image.open(file)
-                            resized_img = resize_image(img, target_size)
-                            img_byte_arr = io.BytesIO()
-                            resized_img.save(img_byte_arr, format=img.format)
-                            zipf.writestr(file.name, img_byte_arr.getvalue())
-                        except Exception as e:
-                            st.error(f"Erro ao processar {file.name}: {e}")
-                buffer.seek(0)
-                st.download_button(
-                    "⬇️ Baixar Imagens Redimensionadas",
-                    buffer,
-                    "imagens_redimensionadas.zip",
-                    mime="application/zip"
-                )
+            with st.spinner("Redimensionando imagens..."):
+                with io.BytesIO() as buffer:
+                    with zipfile.ZipFile(buffer, "w") as zipf:
+                        for file in uploaded_files:
+                            try:
+                                img = Image.open(file)
+                                resized_img = resize_image(img, target_size)
+                                img_byte_arr = io.BytesIO()
+                                resized_img.save(img_byte_arr, format=img.format)
+                                zipf.writestr(file.name, img_byte_arr.getvalue())
+                            except Exception as e:
+                                st.error(f"Erro ao processar {file.name}: {e}")
+                    buffer.seek(0)
+                    st.download_button(
+                        "⬇️ Baixar Imagens Redimensionadas",
+                        buffer,
+                        "imagens_redimensionadas.zip",
+                        mime="application/zip"
+                    )
         else:
             st.warning("⚠️ Por favor, carregue pelo menos uma imagem.")
 
